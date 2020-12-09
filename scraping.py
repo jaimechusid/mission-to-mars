@@ -113,15 +113,16 @@ def hemispheres(browser):
 
     hemi_section = hemisphere_soup.find_all('div', class_='item')
     for hemi in hemi_section:
+
         hemisphere = {}
         hemi_title = hemi.find('h3').get_text()
         thumbnail = hemi.find('a', class_='itemLink product-item').get('href')
         browser.visit(base_url + thumbnail)
-        html2 = browser.html
-        hemi_soup2 = soup(html2, 'html.parser')
-        hemi_img = hemi_soup2.find('img', class_='wide-image').get('src')
         hemisphere['title'] = hemi_title
-        hemisphere['image_url'] = hemi_img
+        browser.find_by_css('a.product-item h3')[hemi_title].click()
+        #Find the sample image 
+        sample_image = browser.find_link_by_text('Sample').first
+        hemisphere['img_url'] = sample_image['href']
         hemisphere_image_urls.append(hemisphere)
         browser.back()
     
